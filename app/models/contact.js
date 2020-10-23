@@ -11,6 +11,10 @@ const contactSchema = new Schema({
         minlength: 3,
         maxlength: 128
     },
+    companyName:{
+        type:String,
+        required:true
+    },
     mobile: {
         type: String,
         required: true,
@@ -25,7 +29,6 @@ const contactSchema = new Schema({
             },
         }
     },
-
     email: {
         type: String,
         validate: {
@@ -41,6 +44,12 @@ const contactSchema = new Schema({
     },
     website: {
         type: String
+    },
+    designation:{
+        type:String
+    },
+    gstTreatment:{
+        type:String
     },
     createdAt: {
         type: Date,
