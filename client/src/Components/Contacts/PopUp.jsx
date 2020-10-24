@@ -13,7 +13,7 @@ export default function PopUp(props) {
           footer={null}
           centered
         >
-         <ContactForm/>
+         <ContactForm onFinish={props.onFinish}/>
         </Modal>
       </>
     );

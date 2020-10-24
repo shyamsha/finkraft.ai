@@ -8,7 +8,7 @@ const contactSchema = new Schema({
     name: {
         type: String,
         required: true,
-        minlength: 3,
+        minlength: 1,
         maxlength: 128
     },
     companyName:{
@@ -38,7 +38,7 @@ const contactSchema = new Schema({
                 return validator.isEmail(value)
             },
             message: function () {
-                return 'invalid email fromat'
+                return 'invalid email format'
             },
         }
     },

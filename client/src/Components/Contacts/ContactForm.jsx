@@ -33,12 +33,8 @@ const tailFormItemLayout = {
   },
 };
 
-export default function ContactForm(){
+export default function ContactForm(props) {
   const [form] = Form.useForm();
-
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
-  };
 
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
@@ -74,7 +70,7 @@ export default function ContactForm(){
       {...formItemLayout}
       form={form}
       name="contact"
-      onFinish={onFinish}
+      onFinish={props.onFinish}
       initialValues={{
         prefix: "91",
       }}
@@ -188,4 +184,4 @@ export default function ContactForm(){
       </Form.Item>
     </Form>
   );
-};
+}

@@ -8,17 +8,24 @@ export default function Contacts() {
   const [error, setError] = useState({});
   const [contacts, setContacts] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get("/contacts")
       .then((response) => {
-        const contacts = response.data;
-        setContacts({ contacts: contacts });
+        if (response.status === 200) {
+          const data = response.data;
+          setContacts(data);
+          setLoading(false);
+        } else if (response.data.errors) {
+          setLoading(false);
+        }
       })
       .catch((err) => {
-        console.log(err);
-        setError({ error: err });
+        setError(err);
+        setLoading(false);
       });
   }, []);
 
@@ -47,28 +54,31 @@ export default function Contacts() {
       title: "Acton",
       key: "action",
       render: (text, record) =>
-        contacts.contacts.length >= 1 ? (
+        contacts.length >= 1 ? (
           <Popconfirm
             title="Sure to delete?"
             onConfirm={() => handleDelete(record._id)}
           >
-            <a role="button" hrefLang="">Delete</a>
+            <a href="">Delete</a>
           </Popconfirm>
         ) : null,
     },
   ];
 
   const handleDelete = (key) => {
+    setLoading(true);
     axios
       .delete(`contacts/delete/${key}`)
       .then((response) => {
-        const contacts = response.data;
-        setContacts({ contacts: contacts });
+        const data = response.data;
+        setContacts([...data]);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       });
-    // const data = [...contacts.contacts];
+    // const data = [...contacts];
     // this.setState({ data: data.filter(item => item._id !== key) });
   };
 
@@ -81,7 +91,28 @@ export default function Contacts() {
   };
 
   const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+    setLoading(true);
+    const data = {
+      name: values.name,
+      companyName: values.companyname,
+      email: values.email,
+      mobile: values.phone,
+      designation: values.designation,
+      gstTreatment: values.gst,
+      website: values.website,
+    };
+    axios
+      .post("/contact/create", data)
+      .then((response) => {
+        const data = response.data;
+        setContacts([...data]);
+        setVisible(false);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err);
+        setLoading(false);
+      });
   };
 
   const header = () => {
@@ -112,17 +143,25 @@ export default function Contacts() {
       </div>
     );
   };
+
+  console.log(contacts);
   return (
     <Fragment>
       <Table
         columns={columns}
-        loading={contacts.contacts ? false : true}
-        dataSource={contacts.contacts}
+        loading={loading}
+        dataSource={contacts}
         pagination={false}
         bordered
         title={header}
       />
-      {visible && <PopUp visible={visible} cancelModal={handleCancel} />}
+      {visible && (
+        <PopUp
+          visible={visible}
+          cancelModal={handleCancel}
+          onFinish={onFinish}
+        />
+      )}
     </Fragment>
   );
 }
