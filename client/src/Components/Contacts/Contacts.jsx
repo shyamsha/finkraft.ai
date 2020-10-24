@@ -1,10 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react";
 import axios from "../../config/config";
-import { Table, Space } from "antd";
+import { Table, Popconfirm } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import PopUp from "./PopUp";
+
 export default function Contacts() {
   const [error, setError] = useState({});
   const [contacts, setContacts] = useState([]);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     axios
@@ -43,19 +46,64 @@ export default function Contacts() {
     {
       title: "Acton",
       key: "action",
-      render: (text, record) => (
-        <Space size="middle">
-          <a>Delete</a>
-        </Space>
-      ),
+      render: (text, record) =>
+        contacts.contacts.length >= 1 ? (
+          <Popconfirm
+            title="Sure to delete?"
+            onConfirm={() => handleDelete(record._id)}
+          >
+            <a role="button" hrefLang="">Delete</a>
+          </Popconfirm>
+        ) : null,
     },
   ];
 
+  const handleDelete = (key) => {
+    axios
+      .delete(`contacts/delete/${key}`)
+      .then((response) => {
+        const contacts = response.data;
+        setContacts({ contacts: contacts });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // const data = [...contacts.contacts];
+    // this.setState({ data: data.filter(item => item._id !== key) });
+  };
+
+  const showModal = () => {
+    setVisible(!visible);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
+  const onFinish = (values) => {
+    console.log("Received values of form: ", values);
+  };
+
   const header = () => {
     return (
-      <div style={{ display: "flex", justifyContent: "space-between",padding:"0.5px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "0.5px",
+        }}
+      >
         <div style={{ color: "#000" }}>All Contacts</div>
-        <div style={{ backgroundColor: "red", color: "whitesmoke",borderRadius:"6px",padding:"4px 6px 3px 4px" }}>
+        <div
+          style={{
+            backgroundColor: "red",
+            color: "whitesmoke",
+            borderRadius: "6px",
+            padding: "4px 6px 3px 4px",
+            cursor: "pointer",
+          }}
+          onClick={showModal}
+        >
           <span style={{ paddingRight: "0.5px", color: "darkslategrey" }}>
             <PlusOutlined />
           </span>
@@ -74,6 +122,7 @@ export default function Contacts() {
         bordered
         title={header}
       />
+      {visible && <PopUp visible={visible} cancelModal={handleCancel} />}
     </Fragment>
   );
 }
