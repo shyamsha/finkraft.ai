@@ -70,16 +70,16 @@ export default function Contacts() {
     axios
       .delete(`contacts/delete/${key}`)
       .then((response) => {
-        const data = response.data;
-        setContacts([...data]);
+        // const data = response.data;
+        // setContacts([...data]);
         setLoading(false);
       })
       .catch((err) => {
         console.log(err);
         setLoading(false);
       });
-    // const data = [...contacts];
-    // this.setState({ data: data.filter(item => item._id !== key) });
+    const data = [...contacts];
+    setContacts(data.filter((item) => item._id !== key));
   };
 
   const showModal = () => {
@@ -91,7 +91,7 @@ export default function Contacts() {
   };
 
   const onFinish = (values) => {
-    setLoading(true);
+    // setLoading(true);
     const data = {
       name: values.name,
       companyName: values.companyname,
@@ -105,9 +105,19 @@ export default function Contacts() {
       .post("/contact/create", data)
       .then((response) => {
         const data = response.data;
-        setContacts([...data]);
+        console.log(response)
+        const responseData = {
+          name: data.name,
+          companyName: data.companyName,
+          email: data.email,
+          mobile: data.mobile,
+          designation: data.designation,
+          gstTreatment: data.gstTreatment,
+          website: data.website,
+        };
         setVisible(false);
         setLoading(false);
+        setContacts([...contacts, responseData]);
       })
       .catch((err) => {
         setError(err);
@@ -144,16 +154,31 @@ export default function Contacts() {
     );
   };
 
-  console.log(contacts);
+  // const rowSelection = {
+  //   onChange: (selectedRowKeys, selectedRows) => {
+  //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+  //   },
+  //   getCheckboxProps: (record) => ({
+  //     disabled: record.name === "Disabled User",
+  //     // Column configuration not to be checked
+  //     name: record.name,
+  //   }),
+  // };
+
   return (
     <Fragment>
       <Table
+        rowSelection={{
+          type: "checkbox",
+          // ...rowSelection,
+        }}
         columns={columns}
         loading={loading}
         dataSource={contacts}
         pagination={false}
         bordered
         title={header}
+        scroll={{ y: 480 }}
       />
       {visible && (
         <PopUp

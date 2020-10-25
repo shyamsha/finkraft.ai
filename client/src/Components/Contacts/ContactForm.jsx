@@ -124,7 +124,7 @@ export default function ContactForm(props) {
         rules={[
           {
             required: true,
-            message: "Please input your Designation!",
+            message: "Please provide your Designation!",
           },
         ]}
       >
@@ -136,7 +136,7 @@ export default function ContactForm(props) {
         rules={[
           {
             required: true,
-            message: "Please confirm your Gst Treatment!",
+            message: "Please provide your Gst Treatment!",
           },
         ]}
       >
@@ -147,12 +147,14 @@ export default function ContactForm(props) {
         label="Phone Number"
         rules={[
           {
-            required: true,
-            message: "Please provide your phone number!",
+            required:true,
+            pattern:/^[^0-9]*(?:(\d)[^0-9]*){10}$/ ,
+            message:"Please provide your valid Mobile Number"
           },
         ]}
       >
         <Input
+          type="number"
           addonBefore={prefixSelector}
           style={{
             width: "100%",
