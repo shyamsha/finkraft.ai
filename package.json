@@ -1,7 +1,7 @@
 {
   "name": "contacts",
   "version": "1.0.0",
-  "description": "",
+  "description": "Contact",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -16,7 +16,7 @@
     "mongoose": "^5.10.9"
   },
   "engines": {
-		"node": ">=10.3.0",
+		"node": "10.3.0",
 		"npm": "^6.8.0"
 	}
 }
