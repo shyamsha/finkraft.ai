@@ -154,9 +154,6 @@ export default function Contacts() {
   return (
     <Fragment>
       <Table
-        rowSelection={{
-          type: "checkbox",
-        }}
         columns={columns}
         loading={loading}
         dataSource={contacts}
