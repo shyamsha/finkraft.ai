@@ -1,5 +1,5 @@
 import React, { useReducer, useEffect } from "react";
-import axios from "../../config/config";
+import axios from "../../../config/config";
 
 const iState = {
   loading: false,

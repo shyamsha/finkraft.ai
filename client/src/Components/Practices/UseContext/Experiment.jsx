@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "../../config/config";
+import axios from "../../../config/config";
 import ContextChild from "./ContextChild";
 
 export const userContext = React.createContext();
